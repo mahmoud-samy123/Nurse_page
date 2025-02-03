@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+ 
+import 'package:lovenurse/models/AppointmentsPage.dart';
+ 
 
 class DateTimeSelectionPage extends StatefulWidget {
   @override
@@ -103,9 +106,15 @@ class _DateTimeSelectionPageState extends State<DateTimeSelectionPage> {
             ),
             SizedBox(height: 20),
             Center(
-              child: ElevatedButton(
+            child: ElevatedButton(
                 onPressed: () {
-                  // يمكنك إضافة إجراء هنا لطلب الحجز
+                  // الانتقال إلى صفحة اختيار التاريخ والوقت
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>AppointmentsPage   (),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),

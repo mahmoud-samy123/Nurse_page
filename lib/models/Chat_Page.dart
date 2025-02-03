@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lovenurse/models/nurse_details.dart';
 
 class ChatDetailPage extends StatefulWidget {
   final String name; // Add this line to accept the name
@@ -22,15 +23,27 @@ class _ChatPageState extends State<ChatDetailPage> {
     }
   }
 
+  // Navigate to another page when the nurse's image is clicked
+  void _navigateToNursePage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => NurseDetailPage(name: widget.name)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
-            CircleAvatar(
-              backgroundImage:
-                  AssetImage('images/image13.png'), // Placeholder image path
+            InkWell(
+              onTap: _navigateToNursePage, // Trigger navigation on tap
+              child: CircleAvatar(
+                backgroundImage:
+                    AssetImage('images/image14.png'), // Placeholder image path
+              ),
             ),
             SizedBox(width: 8),
             Text(widget.name), // Use the name parameter here

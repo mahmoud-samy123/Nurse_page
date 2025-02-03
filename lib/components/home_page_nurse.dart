@@ -1,61 +1,21 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Nursing App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => HomeNurse(),
-        '/homePage': (context) => HomePage(),
-        '/profilePage': (context) => ProfilePage(),
-        '/appointmentsPage': (context) => AppointmentsPage(),
-        '/messagesPage': (context) => MessagesPage(),
-      },
-    );
-  }
-}
-
-class HomeNurse extends StatelessWidget {
-  const HomeNurse({super.key});
-
+ 
+class HomePageNurse extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            CircleAvatar(
-              backgroundImage: AssetImage('images/image13.png'),
-            ),
-            SizedBox(width: 10),
-            Text(
-              'Hello,\nNRS. Same Ali!',
-              style: TextStyle(
-                color: Colors.blue,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+        leading: CircleAvatar(
+          backgroundImage: AssetImage('assets/profile_placeholder.png'), // صورة المستخدم
+        ),
+        title: Text(
+          'Hello,\nNRS. Same Ahmed!',
+          style: TextStyle(color: Colors.blue, fontSize: 18),
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.notifications_none, color: Colors.blue),
-            onPressed: () {},
-          ),
           IconButton(
             icon: Icon(Icons.menu, color: Colors.blue),
             onPressed: () {},
@@ -63,241 +23,109 @@ class HomeNurse extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(10),
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Search',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                prefixIcon: Icon(Icons.search),
               ),
-              child: Row(
+            ),
+            SizedBox(height: 20),
+            Text(
+              "Today's appointments",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.search, color: Colors.grey),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search...',
-                        border: InputBorder.none,
-                      ),
-                    ),
+                  Image.asset(
+                    'assets/no_appointments.png', // Placeholder for illustration
+                    height: 100,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "You don't have appointments?",
+                    style: TextStyle(color: Colors.grey[600]),
                   ),
                 ],
               ),
             ),
             SizedBox(height: 20),
             Text(
-              'Today Appointments',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+              "Explore",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
             Row(
               children: [
-                AppointmentCard(
-                  name: 'Nesma Ali',
-                  task: 'Change on a wound',
-                  time: '11:00 AM',
-                  imageUrl: 'images/image12.png',
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      side: BorderSide(color: Colors.grey),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text('New Patients', style: TextStyle(color: Colors.black)),
+                  ),
                 ),
                 SizedBox(width: 10),
-                AppointmentCard(
-                  name: 'Mariam Mohammed',
-                  task: 'Glucose measurement',
-                  time: '12:00 AM',
-                  imageUrl: 'images/image12.png',
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      side: BorderSide(color: Colors.grey),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text('Investigations', style: TextStyle(color: Colors.black)),
+                  ),
                 ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Explore',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                ExploreButton(label: 'New Patient'),
-                SizedBox(width: 10),
-                ExploreButton(label: 'Investigations'),
               ],
             ),
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              Navigator.pushNamed(context, '/homePage');
-              break;
-            case 1:
-              Navigator.pushNamed(context, '/profilePage');
-              break;
-            case 2:
-              Navigator.pushNamed(context, '/appointmentsPage');
-              break;
-            case 3:
-              Navigator.pushNamed(context, '/messagesPage');
-              break;
-          }
-        },
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.schedule),
+            icon: Icon(Icons.calendar_today),
             label: 'Appointments',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Messages',
+            icon: Icon(Icons.person),
+            label: 'Profile',
           ),
         ],
       ),
-    );
-  }
-}
-
-class AppointmentCard extends StatelessWidget {
-  final String name;
-  final String task;
-  final String time;
-  final String imageUrl;
-
-  const AppointmentCard({
-    required this.name,
-    required this.task,
-    required this.time,
-    required this.imageUrl,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 2,
-              blurRadius: 5,
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            CircleAvatar(
-              backgroundImage: AssetImage(imageUrl),
-              radius: 25,
-            ),
-            SizedBox(height: 8),
-            Text(
-              name,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Text(
-              task,
-              style: TextStyle(color: Colors.grey),
-            ),
-            SizedBox(height: 8),
-            Text(
-              time,
-              style: TextStyle(color: Colors.blue),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ExploreButton extends StatelessWidget {
-  final String label;
-
-  const ExploreButton({required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.grey[300]!),
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// صفحات التنقل
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Home Page')),
-      body: Center(child: Text('Welcome to Home Page')),
-    );
-  }
-}
-
-class ProfilePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Profile Page')),
-      body: Center(child: Text('Welcome to Profile Page')),
-    );
-  }
-}
-
-class AppointmentsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Appointments Page')),
-      body: Center(child: Text('Welcome to Appointments Page')),
-    );
-  }
-}
-
-class MessagesPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Messages Page')),
-      body: Center(child: Text('Welcome to Messages Page')),
     );
   }
 }

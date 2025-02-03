@@ -10,7 +10,12 @@ class SearchResultsPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: Icon(Icons.arrow_back, color: Colors.black),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context); // الرجوع للصفحة السابقة
+          },
+        ),
         title: Text(
           "Search by City",
           style: TextStyle(color: Colors.black),

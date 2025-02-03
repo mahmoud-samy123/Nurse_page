@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lovenurse/models/AppointmentsPage.dart';
 import 'package:lovenurse/models/MorePage.dart';
+import 'package:lovenurse/models/menu_page.dart';
 import 'package:lovenurse/models/notifications.dart';
 import 'package:lovenurse/models/nurse_page.dart';
 import 'package:lovenurse/models/search.dart';
@@ -130,7 +131,16 @@ class HomeContent extends StatelessWidget {
                     child: Icon(Icons.notifications, color: Colors.blue),
                   ),
                   SizedBox(width: 16),
-                  Icon(Icons.menu, color: Colors.black),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to NotificationsPage
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MenuScreen()),
+                      );
+                    },
+                    child: Icon(Icons.menu, color: Colors.black),
+                  ),
                 ],
               ),
             ],
