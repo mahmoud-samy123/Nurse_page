@@ -96,7 +96,7 @@ class ProfileScreen extends StatelessWidget {
                 border: Border.all(color: Colors.blueAccent),
               ),
               child: Text(
-                'nnnnmjhjvvgg hhgbbbvvg\nnbnnnbbbbsfdsfdsgd',
+                'nnnnmjhjvvgg hhgbbbvvgnnbnnnbbbbsfdsfdsgd',
                 style: TextStyle(fontSize: 16),
               ),
             ),

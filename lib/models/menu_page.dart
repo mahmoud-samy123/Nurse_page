@@ -5,6 +5,7 @@ class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       backgroundColor: Color(0xFF00A2E8), // لون الخلفية كما هو في الصورة
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 40.0),

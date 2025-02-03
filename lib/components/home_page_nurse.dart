@@ -1,128 +1,230 @@
 import 'package:flutter/material.dart';
+import 'package:lovenurse/components/chat_page.dart';
+import 'package:lovenurse/components/menuPage.dart';
+import 'package:lovenurse/components/notification_page.dart';
+import 'package:lovenurse/components/patient_page.dart';
+import 'package:lovenurse/components/services_page.dart';
 
- 
-class HomePageNurse extends StatelessWidget {
+import 'package:lovenurse/models/menu_page.dart';
+import 'package:lovenurse/models/notifications.dart';
+
+import 'package:lovenurse/models/search.dart';
+
+class HomePageNurse extends StatefulWidget {
+  @override
+  _HomePagePatientState createState() => _HomePagePatientState();
+}
+
+class _HomePagePatientState extends State<HomePageNurse> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _pages = [
+    HomeContent(),
+    PatientsPage(),
+    ServicesPage(),
+    ChatPage()
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: CircleAvatar(
-          backgroundImage: AssetImage('assets/profile_placeholder.png'), // صورة المستخدم
-        ),
-        title: Text(
-          'Hello,\nNRS. Same Ahmed!',
-          style: TextStyle(color: Colors.blue, fontSize: 18),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.menu, color: Colors.blue),
-            onPressed: () {},
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: _pages[_selectedIndex], // Display the selected page content
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
+      ),
+    );
+  }
+}
+
+// Custom Bottom Navigation Bar with Container styling
+class CustomBottomNavigationBar extends StatelessWidget {
+  final int selectedIndex;
+  final Function(int) onItemTapped;
+
+  CustomBottomNavigationBar({
+    required this.selectedIndex,
+    required this.onItemTapped,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 5),
+      margin: EdgeInsets.all(25),
+      decoration: BoxDecoration(
+        color: Colors.blue,
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 10,
+            offset: Offset(0, -1),
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Search',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                prefixIcon: Icon(Icons.search),
+      child: BottomNavigationBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white54,
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
+        type: BottomNavigationBarType.fixed,
+        currentIndex: selectedIndex,
+        onTap: onItemTapped,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.group_add_rounded),
+            label: "Patients",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.room_service_sharp),
+            label: "Services",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            label: "Chat",
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Home page content widget
+class HomeContent extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CircleAvatar(
+                radius: 24,
+                backgroundImage: AssetImage('images/image11.png'),
               ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              "Today's appointments",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    blurRadius: 4,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Row(
                 children: [
-                  Image.asset(
-                    'assets/no_appointments.png', // Placeholder for illustration
-                    height: 100,
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to NotificationsPage
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => notification()),
+                      );
+                    },
+                    child: Icon(Icons.notifications, color: Colors.blue),
                   ),
-                  SizedBox(height: 10),
-                  Text(
-                    "You don't have appointments?",
-                    style: TextStyle(color: Colors.grey[600]),
+                  SizedBox(width: 16),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to NotificationsPage
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => menuPage()),
+                      );
+                    },
+                    child: Icon(Icons.menu, color: Colors.black),
                   ),
                 ],
               ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              "Explore",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Row(
+            ],
+          ),
+          SizedBox(height: 16),
+          RichText(
+            text: TextSpan(
               children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      side: BorderSide(color: Colors.grey),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Text('New Patients', style: TextStyle(color: Colors.black)),
+                TextSpan(
+                  text: "Hello, ",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
                   ),
                 ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      side: BorderSide(color: Colors.grey),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Text('Investigations', style: TextStyle(color: Colors.black)),
+                TextSpan(
+                  text: "Shahd Ahmed",
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.black,
                   ),
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Appointments',
+          SizedBox(height: 16),
+          TextField(
+            decoration: InputDecoration(
+              hintText: "City",
+              prefixIcon: Icon(Icons.location_city, color: Colors.blue),
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  // Navigate to SearchResultsPage
+                },
+                child: Icon(Icons.search, color: Colors.blue),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+              filled: true,
+              fillColor: Colors.grey[200],
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+          SizedBox(height: 24),
+          Text(
+            "Today's appointments",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 12),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.lightBlue[50],
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Image.asset('images/image12.png', height: 40),
+                SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "You don't have appointments?",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        "Hurry up and ask a nurse to help you.",
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
