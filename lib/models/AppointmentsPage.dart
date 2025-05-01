@@ -125,7 +125,6 @@ class AppointmentsPage extends StatelessWidget {
                               // أضف الوظيفة هنا، مثل فتح التفاصيل أو عرض المزيد من المعلومات
                             },
                             style: ElevatedButton.styleFrom(
-                              primary: Color.fromRGBO(255, 255, 255, 1),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5),
                               ),
@@ -151,7 +150,6 @@ class AppointmentsPage extends StatelessWidget {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.blue,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                         ),

@@ -14,7 +14,6 @@ class viewsdetalls extends StatelessWidget {
         title: ElevatedButton(
           onPressed: () {},
           style: ElevatedButton.styleFrom(
-            primary: Colors.blue,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -120,7 +119,6 @@ class viewsdetalls extends StatelessWidget {
                   // أضف هنا ما تريد أن يحدث عند الضغط على الزر
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.blue[50],
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),

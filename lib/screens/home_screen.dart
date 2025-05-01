@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lovenurse/screens/second_page.dart';
 
 class NursingHomePage extends StatelessWidget {
+  const NursingHomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,15 +13,14 @@ class NursingHomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Image
             Image.asset(
-              'images/image1.jpg', // Replace with your image path
+              'images/image1.jpg',
               height: 210,
               width: double.infinity,
+              fit: BoxFit.cover,
             ),
-            SizedBox(height: 20),
-            // Title
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'Find\nyour best nurses here',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -28,18 +29,16 @@ class NursingHomePage extends StatelessWidget {
                 color: Colors.black,
               ),
             ),
-            SizedBox(height: 10),
-            // Description
+            const SizedBox(height: 10),
             Text(
-              'This action provides all amenities for the patient. You can request a nurse to assist you with anything within his work.',
+              'This action provides all amenities for the patient. You can request a nurse to assist you with anything within their duties.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.grey[600],
+                color: Colors.grey.shade600,
               ),
             ),
-            SizedBox(height: 30),
-            // Button
+            const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -47,17 +46,29 @@ class NursingHomePage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => SecondPage()),
                 );
               },
-              style: ElevatedButton.styleFrom(
-                primary: Colors.blue, // Button color
-                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                  (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.pressed)) {
+                      return Colors.blueAccent;
+                    }
+                    return null;
+                  },
+                ),
+                padding: MaterialStateProperty.all<EdgeInsets>(
+                  const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                ),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               ),
-              child: Text(
+              child: const Text(
                 'Next',
                 style: TextStyle(
-                  color: Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),

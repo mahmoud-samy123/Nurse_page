@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lovenurse/components/service.dart';
-
-import 'package:lovenurse/screens/ForgotPasswordPage.dart'; // استيراد صفحة ForgotPasswordPage
+import 'package:lovenurse/screens/ForgotPasswordPage.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class TargetPage2 extends StatefulWidget {
   const TargetPage2({super.key});
@@ -12,6 +13,49 @@ class TargetPage2 extends StatefulWidget {
 
 class _TargetPageState extends State<TargetPage2> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool _isLoading = false;
+
+  Future<void> _signIn() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _isLoading = true);
+
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      // الانتقال إلى الصفحة بعد تسجيل الدخول بنجاح
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => ServicePage()),
+      );
+    } on FirebaseAuthException catch (e) {
+      _showErrorDialog(e.message ?? "Login failed. Please try again.");
+    }
+
+    setState(() => _isLoading = false);
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Login Error"),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +78,7 @@ class _TargetPageState extends State<TargetPage2> {
               ),
               SizedBox(height: 40),
               TextFormField(
+                controller: _emailController,
                 decoration: InputDecoration(
                   hintText: 'Enter Your Email',
                   border: OutlineInputBorder(
@@ -49,6 +94,7 @@ class _TargetPageState extends State<TargetPage2> {
               ),
               SizedBox(height: 16),
               TextFormField(
+                controller: _passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   hintText: 'Enter Your Password',
@@ -66,25 +112,19 @@ class _TargetPageState extends State<TargetPage2> {
               ),
               SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ServicePage()),
-                    );
-                  }
-                },
+                onPressed: _isLoading ? null : _signIn,
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                   padding: EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: Text(
-                  'Login',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                ),
+                child: _isLoading
+                    ? CircularProgressIndicator(color: Colors.white)
+                    : Text(
+                        'Login',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
               ),
               SizedBox(height: 20),
               Row(
@@ -96,7 +136,6 @@ class _TargetPageState extends State<TargetPage2> {
                   ),
                   TextButton(
                     onPressed: () {
-                      // التنقل إلى صفحة ForgotPasswordPage
                       Navigator.push(
                         context,
                         MaterialPageRoute(

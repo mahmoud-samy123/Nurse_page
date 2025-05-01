@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lovenurse/widget/NurseSignUpPage.dart';
-import 'package:lovenurse/widget/patientSignUpPage.dart';
+import 'package:lovenurse/auth/NurseSignUpPage.dart';
+import 'package:lovenurse/auth/patientSignUpPage.dart';
 
 class ThirdPage extends StatefulWidget {
   @override
@@ -9,7 +9,6 @@ class ThirdPage extends StatefulWidget {
 
 class _ThirdPageState extends State<ThirdPage> {
   String selectedRole = '';
-  bool isPressed = false; // متغير للتحكم بلون الزر
 
   @override
   Widget build(BuildContext context) {
@@ -133,10 +132,6 @@ class _ThirdPageState extends State<ThirdPage> {
               SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                    isPressed = true;
-                  });
-
                   if (selectedRole.isNotEmpty) {
                     if (selectedRole == 'Nurse') {
                       Navigator.push(
@@ -154,12 +149,14 @@ class _ThirdPageState extends State<ThirdPage> {
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                          content: Text('Please select an option to continue')),
+                        content: Text('Please select an option to continue'),
+                      ),
                     );
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: isPressed ? Colors.blue : Colors.white,
+                  backgroundColor:
+                      selectedRole.isNotEmpty ? Colors.blue : Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -168,7 +165,8 @@ class _ThirdPageState extends State<ThirdPage> {
                 child: Text(
                   'Continue',
                   style: TextStyle(
-                    color: Colors.black,
+                    color:
+                        selectedRole.isNotEmpty ? Colors.white : Colors.black,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),

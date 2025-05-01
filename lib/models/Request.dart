@@ -119,7 +119,6 @@ class _RequestPageState extends State<RequestPage> {
                 },
                 child: Text('Continue'),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
                   padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
                 ),
               ),

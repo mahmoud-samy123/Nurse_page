@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lovenurse/components/home_page_nurse.dart';
 import 'package:lovenurse/components/navigator_page.dart';
- 
 
 class ServicePage extends StatefulWidget {
   @override
@@ -145,11 +144,10 @@ class _MyServicesPageState extends State<ServicePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) =>  HomePageNurse()),
+                MaterialPageRoute(builder: (context) => HomePageNurse()),
               );
             },
             style: ElevatedButton.styleFrom(
-              primary: Colors.blue.shade700,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),

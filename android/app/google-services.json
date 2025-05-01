@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "797352393872",
+    "project_id": "nurse-app-46ae3",
+    "storage_bucket": "nurse-app-46ae3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:797352393872:android:7b9f674fa4dcfcd31cec15",
+        "android_client_info": {
+          "package_name": "com.example.lovenurse"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCePcHeQXwNOp46X15_b1N_NkGoYz0PMCw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

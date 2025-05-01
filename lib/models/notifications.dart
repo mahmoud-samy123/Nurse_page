@@ -148,8 +148,6 @@ class _NotificationCardState extends State<NotificationCard> {
                     // Add functionality here to handle button press
                   },
                   style: ElevatedButton.styleFrom(
-                    onPrimary: Colors.white,
-                    primary: Colors.white,
                     side: BorderSide(color: Colors.grey),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),

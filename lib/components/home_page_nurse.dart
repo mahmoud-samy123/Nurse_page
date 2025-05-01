@@ -1,52 +1,79 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+
 import 'package:lovenurse/components/chat_page.dart';
 import 'package:lovenurse/components/menuPage.dart';
 import 'package:lovenurse/components/notification_page.dart';
 import 'package:lovenurse/components/patient_page.dart';
 import 'package:lovenurse/components/services_page.dart';
-
-import 'package:lovenurse/models/menu_page.dart';
-import 'package:lovenurse/models/notifications.dart';
-
-import 'package:lovenurse/models/search.dart';
+import 'package:lovenurse/screens/chat_screen.dart';
 
 class HomePageNurse extends StatefulWidget {
   @override
-  _HomePagePatientState createState() => _HomePagePatientState();
+  _HomePageNurseState createState() => _HomePageNurseState();
 }
 
-class _HomePagePatientState extends State<HomePageNurse> {
+class _HomePageNurseState extends State<HomePageNurse> {
   int _selectedIndex = 0;
+  String userName = 'Loading...';
+  String userId = '';
 
-  final List<Widget> _pages = [
-    HomeContent(),
-    PatientsPage(),
-    ServicesPage(),
-    ChatPage()
-  ];
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  Future<void> fetchUserData() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        userId = user.uid;
+
+        DatabaseReference ref = FirebaseDatabase.instance.ref("users/$userId");
+        final snapshot = await ref.get();
+
+        if (snapshot.exists) {
+          final data = snapshot.value as Map;
+          setState(() {
+            userName = data["username"] ?? 'No Name';
+          });
+        } else {
+          print("No data found for user");
+        }
+      }
+    } catch (e) {
+      print('Error fetching user data: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _pages = [
+      HomeContent(userName: userName),
+      PatientsPage(),
+      ServicesPage(),
+      ChatScreen(receiverId: '', receiverName: ''),
+    ];
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: _pages[_selectedIndex], // Display the selected page content
+        child: _pages[_selectedIndex],
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped,
+        onItemTapped: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
     );
   }
 }
 
-// Custom Bottom Navigation Bar with Container styling
 class CustomBottomNavigationBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemTapped;
@@ -83,30 +110,21 @@ class CustomBottomNavigationBar extends StatelessWidget {
         currentIndex: selectedIndex,
         onTap: onItemTapped,
         items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.group_add_rounded),
-            label: "Patients",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.room_service_sharp),
-            label: "Services",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: "Chat",
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.group_add_rounded), label: "Patients"),
+          BottomNavigationBarItem(icon: Icon(Icons.room_service_sharp), label: "Services"),
+          BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
         ],
       ),
     );
   }
 }
 
-// Home page content widget
 class HomeContent extends StatelessWidget {
+  final String userName;
+
+  HomeContent({required this.userName});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -125,22 +143,14 @@ class HomeContent extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      // Navigate to NotificationsPage
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => notification()),
-                      );
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => notification()));
                     },
                     child: Icon(Icons.notifications, color: Colors.blue),
                   ),
                   SizedBox(width: 16),
                   GestureDetector(
                     onTap: () {
-                      // Navigate to NotificationsPage
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => menuPage()),
-                      );
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => menuPage()));
                     },
                     child: Icon(Icons.menu, color: Colors.black),
                   ),
@@ -154,18 +164,11 @@ class HomeContent extends StatelessWidget {
               children: [
                 TextSpan(
                   text: "Hello, ",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                  ),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue),
                 ),
                 TextSpan(
-                  text: "Shahd Ahmed",
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.black,
-                  ),
+                  text: userName,
+                  style: TextStyle(fontSize: 24, color: Colors.black),
                 ),
               ],
             ),
@@ -177,7 +180,7 @@ class HomeContent extends StatelessWidget {
               prefixIcon: Icon(Icons.location_city, color: Colors.blue),
               suffixIcon: GestureDetector(
                 onTap: () {
-                  // Navigate to SearchResultsPage
+                  // Search
                 },
                 child: Icon(Icons.search, color: Colors.blue),
               ),
@@ -189,10 +192,7 @@ class HomeContent extends StatelessWidget {
             ),
           ),
           SizedBox(height: 24),
-          Text(
-            "Today's appointments",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
+          Text("Today's appointments", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           SizedBox(height: 12),
           Container(
             decoration: BoxDecoration(
@@ -208,18 +208,9 @@ class HomeContent extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "You don't have appointments?",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      Text("You don't have appointments?", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                       SizedBox(height: 4),
-                      Text(
-                        "Hurry up and ask a nurse to help you.",
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
+                      Text("Hurry up and ask a nurse to help you.", style: TextStyle(fontSize: 14, color: Colors.grey)),
                     ],
                   ),
                 ),
